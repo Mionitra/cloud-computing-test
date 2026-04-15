@@ -1,0 +1,80 @@
+{
+    "reportSchema": "1.1",
+    "scanInfo": {
+        "engineVersion": "12.2.1",
+        "dataSource": [
+{
+                "name": "NVD API Last Checked",
+                "timestamp": "2026-04-13T10:17:04Z"
+            }
+,{
+                "name": "NVD API Last Modified",
+                "timestamp": "2026-04-13T10:16:11Z"
+            }
+        ]
+
+            ,"analysisExceptions":[
+{            
+            
+            
+            "exception":{"message":"org.owasp.dependencycheck.analyzer.exception.AnalysisException: Error extracting file `\/src\/gitleaks.tar.gz`: \/src\/gitleaks.tar.gz (No such file or directory)"
+                ,"stackTrace":[
+"org.owasp.dependencycheck.analyzer.ArchiveAnalyzer.extractFiles(ArchiveAnalyzer.java:441)"
+,"org.owasp.dependencycheck.analyzer.ArchiveAnalyzer.extractAndAnalyze(ArchiveAnalyzer.java:295)"
+,"org.owasp.dependencycheck.analyzer.ArchiveAnalyzer.analyzeDependency(ArchiveAnalyzer.java:277)"
+,"org.owasp.dependencycheck.analyzer.AbstractAnalyzer.analyze(AbstractAnalyzer.java:131)"
+,"org.owasp.dependencycheck.AnalysisTask.call(AnalysisTask.java:88)"
+,"org.owasp.dependencycheck.AnalysisTask.call(AnalysisTask.java:37)"
+,"java.base\/java.util.concurrent.FutureTask.run(FutureTask.java:328)"
+,"java.base\/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)"
+,"java.base\/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)"
+,"java.base\/java.lang.Thread.run(Thread.java:1474)"
+                ]
+            }
+}
+            ]
+
+    },
+    "projectInfo": {
+        "name": "",
+        "reportDate": "2026-04-13T11:21:48.357358740Z",
+        "credits": {
+            "NVD": "This product uses the NVD API but is not endorsed or certified by the NVD. This report contains data retrieved from the National Vulnerability Database: https://nvd.nist.gov",
+            "CISA": "This report may contain data retrieved from the CISA Known Exploited Vulnerability Catalog: https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+            "NPM": "This report may contain data retrieved from the Github Advisory Database (via NPM Audit API): https://github.com/advisories/",
+            "RETIREJS": "This report may contain data retrieved from the RetireJS community: https://retirejs.github.io/retire.js/",
+            "OSSINDEX": "This report may contain data retrieved from the Sonatype OSS Index: https://ossindex.sonatype.org"
+        }
+    },
+    "dependencies": [
+{
+            "isVirtual": false,
+            "fileName": "gitleaks.tar.gz",
+            "filePath": "\/src\/gitleaks.tar.gz"
+,"md5": "9d1ead73e678fa2f51a70a933b0bf017",
+            "sha1": "d205cbd6783332a212c5ae92d73c77178c2d2f28",
+            "sha256": "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"            ,"evidenceCollected": {
+                "vendorEvidence": [
+{
+                            "type": "vendor",
+                            "confidence": "HIGH",
+                            "source": "file",
+                            "name": "name",
+                            "value": "gitleaks.tar"
+                        }
+                ],
+                "productEvidence": [
+{
+                            "type": "product",
+                            "confidence": "HIGH",
+                            "source": "file",
+                            "name": "name",
+                            "value": "gitleaks.tar"
+                    }
+                ],
+                "versionEvidence": [
+                ]
+            }
+
+        }    ]
+}
