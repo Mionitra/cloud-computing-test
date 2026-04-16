@@ -22,7 +22,9 @@ echo "✅ Trivy done"
 
 # OWASP Dependency-Check - NVD cache persisted via named volume
 echo "▶ Running OWASP Dependency-Check..."
-docker compose -f "$COMPOSE_FILE" run --rm dependency-check \
+docker compose -f "$COMPOSE_FILE" run --rm  \
+  -e NVD_API_KEY="${NVD_API_KEY}" \
+  dependency-check \
   --scan /src \
   --format JSON \
   --out /report/build \

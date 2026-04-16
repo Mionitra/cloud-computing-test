@@ -33,6 +33,12 @@ pipeline {
             }
         }
 
+        stage('Debug NVD API Key') {
+            steps {
+                sh 'echo "NVD key length: ${#NVD_API_KEY}"'  // prints length, not the value
+            }
+        }
+
         stage('Scan image') {
             steps {
                 echo 'Scanning image (Trivy, Dependency-Check)...'

@@ -1,4 +1,7 @@
-FROM aquasec/trivy:0.50.1
+FROM alpine:3.19
 
-WORKDIR /app
+RUN apk add --no-cache curl \
+  && curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
+     | sh -s -- -b /usr/local/bin
+
 ENTRYPOINT ["trivy"]

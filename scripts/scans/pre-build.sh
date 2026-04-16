@@ -3,11 +3,11 @@ set -e
 
 PROJECT_DIR=$(pwd)
 COMPOSE_FILE="${PROJECT_DIR}/DevSecOps-tools/docker-compose.yml"
-REPORTS_DIR="${PROJECT_DIR}/DevSecOps-tools/security-reports"
+TOOLS_DIR="${PROJECT_DIR}/DevSecOps-tools"
 
-# Create ALL report dirs on the host before containers try to write
-mkdir -p "${REPORTS_DIR}/pre-build"
-mkdir -p "${REPORTS_DIR}/build"
+# This is what the container sees as /app/security-reports/pre-build/
+mkdir -p "${TOOLS_DIR}/security-reports/pre-build"
+mkdir -p "${TOOLS_DIR}/security-reports/build"
 
 echo "🔐 Running PRE-BUILD security scans..."
 
