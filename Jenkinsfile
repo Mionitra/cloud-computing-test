@@ -7,7 +7,6 @@ pipeline {
         REGISTRY     = "ghcr.io/Mionitra"
         FULL_IMAGE   = "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
         DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
-        DOCKERHUB    = credentials('DockerHub Credentials')
     }
 
     stages {
