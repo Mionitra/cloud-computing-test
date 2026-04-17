@@ -4,8 +4,8 @@ set -e
 PROJECT_DIR=$(pwd)
 COMPOSE_FILE="${PROJECT_DIR}/DevSecOps-tools/docker-compose.yml"
 
-
-SIGN_TARGET="${IMAGE_DIGEST:-${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}}"
+# Always rebuild full image reference with registry
+SIGN_TARGET="${REGISTRY}/${IMAGE_NAME}@${IMAGE_DIGEST##*@}"
 
 echo "🔏 Signing: ${SIGN_TARGET}"
 
