@@ -5,6 +5,7 @@ RUN apk add --no-cache curl \
      -o /usr/local/bin/cosign \
   && chmod +x /usr/local/bin/cosign
 
-RUN apk add --no-cache docker-cli
+WORKDIR /app
 
-ENTRYPOINT ["cosign"]
+ENTRYPOINT [""]
+CMD ["cosign"]

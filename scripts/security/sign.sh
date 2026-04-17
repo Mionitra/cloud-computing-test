@@ -11,7 +11,8 @@ echo "🔏 Signing: ${SIGN_TARGET}"
 
 docker compose -f "$COMPOSE_FILE" run --rm \
   -e COSIGN_PASSWORD="${COSIGN_PASSWORD}" \
-  -e DOCKER_CONFIG=/tmp \
+  -v ${PROJECT_DIR}/cosign:/app \
+  -v $HOME/.docker:/root/.docker \
   cosign sign \
   --key /app/cosign.key \
   "${SIGN_TARGET}"

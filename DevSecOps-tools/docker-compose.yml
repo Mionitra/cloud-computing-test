@@ -40,7 +40,6 @@ services:
     build: ./cosign
     volumes:
       - ./:/app
-    entrypoint: ["cosign"]
 
 volumes:
   trivy-cache:
