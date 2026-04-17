@@ -1,9 +1,10 @@
-FROM alpine:3.20
+FROM alpine:3.19
 
-RUN apk add --no-cache wget && \
-    wget https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 && \
-    chmod +x cosign-linux-amd64 && \
-    mv cosign-linux-amd64 /usr/local/bin/cosign
+RUN apk add --no-cache curl \
+  && curl -sfL https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 \
+     -o /usr/local/bin/cosign \
+  && chmod +x /usr/local/bin/cosign
 
-WORKDIR /app
+RUN apk add --no-cache docker-cli
+
 ENTRYPOINT ["cosign"]

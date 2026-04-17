@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME   = "devops-app"
         IMAGE_TAG    = "${env.BUILD_NUMBER}"
-        REGISTRY     = "ghcr.io/Mionitra"
+        REGISTRY     = "docker.io/Mionitra"
         FULL_IMAGE   = "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
         DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
         DOCKERHUB    = credentials('dockerhub-credentials')
@@ -27,55 +27,54 @@ pipeline {
         }
 
         stage('Build image') {
-            steps {
-                echo 'Building Docker image...'
-                sh "docker build -t ${DOCKER_IMAGE} -f docker/Dockerfile ."
-            }
-        }
-        stage('Docker Login') {
-            steps {
-                sh 'echo "${DOCKERHUB_PSW}" | docker login -u "${DOCKERHUB_USR}" --password-stdin'
-            }
-        }
+    steps {
+        echo 'Building Docker image...'
+        sh "docker build -t ${DOCKER_IMAGE} -f docker/Dockerfile ."
+    }
+}
 
-        stage('Scan image') {
-            steps {
-                echo 'Scanning image (Trivy, Dependency-Check)...'
-                sh 'chmod +x scripts/scans/build-scan.sh'
-                sh './scripts/scans/build-scan.sh'
-            }
-        }
+stage('Scan image') {
+    steps {
+        echo 'Scanning image...'
+        sh 'chmod +x scripts/scans/build-scan.sh'
+        sh './scripts/scans/build-scan.sh'
+    }
+}
 
-        stage('Signature') {
-            steps {
-                echo 'Signing image with Cosign...'
-                sh 'chmod +x scripts/security/sign.sh'
-                sh './scripts/security/sign.sh'
-            }
+stage('Push image') {
+    steps {
+        echo 'Pushing image to registry...'
+        sh "docker tag ${DOCKER_IMAGE} ${FULL_IMAGE}"
+        sh "docker push ${FULL_IMAGE}"
+        // Capture the digest after push for signing
+        script {
+            env.IMAGE_DIGEST = sh(
+                script: "docker inspect --format='{{index .RepoDigests 0}}' ${FULL_IMAGE}",
+                returnStdout: true
+            ).trim()
         }
+        echo "Pushed with digest: ${env.IMAGE_DIGEST}"
+    }
+}
 
-        stage('Stockage') {
-            steps {
-                echo 'Pushing image to registry...'
-                // sh "docker tag ${DOCKER_IMAGE} ${FULL_IMAGE}"
-                // sh "docker push ${FULL_IMAGE}"
-                echo "Image ${DOCKER_IMAGE} would be pushed to ${REGISTRY}"
-            }
+stage('Signature') {
+    steps {
+        echo 'Signing image...'
+        sh 'chmod +x scripts/security/sign.sh'
+        sh './scripts/security/sign.sh'
+    }
+}
+
+stage('Déploiement') {
+    steps {
+        script {
+            echo 'Verifying signature before deployment...'
+            sh 'chmod +x scripts/security/verify.sh'
+            sh './scripts/security/verify.sh'
+            echo 'Deploying application...'
         }
-
-        stage('Déploiement') {
-            steps {
-                script {
-                    echo 'Verifying signature before deployment...'
-                    sh 'chmod +x scripts/security/verify.sh'
-                    sh './scripts/security/verify.sh'
-
-                    echo 'Deploying application...'
-                    // deployment logic here, e.g. docker-compose up -d
-                    // sh "docker-compose up -d"
-                }
-            }
-        }
+    }
+}
     }
 
     post {
