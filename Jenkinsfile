@@ -48,9 +48,19 @@ stage('Push image') {
         sh "docker push ${FULL_IMAGE}"
         // Capture the digest after push for signing
         script {
-        env.IMAGE_DIGEST = "${FULL_IMAGE}"
-    }
-        echo "Pushed with digest: ${env.IMAGE_DIGEST}"
+    env.IMAGE_DIGEST = sh(
+        script: """
+        docker buildx imagetools inspect ${FULL_IMAGE} \
+        --format '{{json .Manifest.Digest}}' | tr -d '"'
+        """,
+        returnStdout: true
+    ).trim()
+
+    env.SIGN_TARGET = "${REGISTRY}/${IMAGE_NAME}@${IMAGE_DIGEST}"
+}
+
+echo "Using digest with the env sign_target: ${env.SIGN_TARGET}"
+        echo "Pushed with digest with the image_digest: ${env.IMAGE_DIGEST}"
     }
 }
 
