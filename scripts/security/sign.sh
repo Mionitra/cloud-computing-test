@@ -1,20 +1,44 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
-PROJECT_DIR=$(pwd)
-COMPOSE_FILE="${PROJECT_DIR}/DevSecOps-tools/docker-compose.yml"
+echo "🔏 Starting image signing..."
 
-# Always rebuild full image reference with registry
-SIGN_TARGET="${REGISTRY}/${IMAGE_NAME}@${IMAGE_DIGEST##*@}"
+# --- Resolve paths (robust for Jenkins + local) ---
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
-echo "🔏 Signing: ${SIGN_TARGET}"
+COSIGN_DIR="${PROJECT_ROOT}/DevSecOps-tools/cosign"
+COMPOSE_FILE="${PROJECT_ROOT}/DevSecOps-tools/docker-compose.yml"
 
-docker compose -f "$COMPOSE_FILE" run --rm \
+# --- Validate inputs ---
+if [ -z "${IMAGE_DIGEST:-}" ]; then
+  echo "❌ IMAGE_DIGEST is not set"
+  exit 1
+fi
+
+if [ -z "${COSIGN_PASSWORD:-}" ]; then
+  echo "❌ COSIGN_PASSWORD is not set"
+  exit 1
+fi
+
+if [ ! -f "${COSIGN_DIR}/cosign.key" ]; then
+  echo "❌ cosign.key not found at ${COSIGN_DIR}/cosign.key"
+  exit 1
+fi
+
+# --- Build target (digest format required) ---
+SIGN_TARGET="${IMAGE_DIGEST}"
+
+echo "📍 Using key: ${COSIGN_DIR}/cosign.key"
+echo "📦 Signing: ${SIGN_TARGET}"
+
+# --- Sign image ---
+docker compose -f "${COMPOSE_FILE}" run --rm \
   -e COSIGN_PASSWORD="${COSIGN_PASSWORD}" \
-  -v ${PROJECT_DIR}/cosign:/app \
-  -v $HOME/.docker:/root/.docker \
+  -v "${COSIGN_DIR}:/app" \
+  -v "$HOME/.docker:/root/.docker" \
   cosign sign \
   --key /app/cosign.key \
   "${SIGN_TARGET}"
 
-echo "✅ Image signed."
+echo "✅ Image signed successfully."

@@ -60,8 +60,10 @@ stage('Push image') {
 stage('Signature') {
     steps {
         echo 'Signing image...'
-        sh 'chmod +x scripts/security/sign.sh'
-        sh './scripts/security/sign.sh'
+        withCredentials([string(credentialsId: 'cosign-password-id', variable: 'COSIGN_PASSWORD')]) {
+            sh 'chmod +x scripts/security/sign.sh'
+            sh './scripts/security/sign.sh'
+        }
     }
 }
 
