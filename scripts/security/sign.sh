@@ -32,6 +32,17 @@ SIGN_TARGET="${IMAGE_DIGEST}"
 echo "📍 Using key: ${COSIGN_DIR}/cosign.key"
 echo "📦 Signing: ${SIGN_TARGET}"
 
+# Login to Docker Hub
+echo "${DOCKERHUB_PSW}" | docker login -u "${DOCKERHUB_USR}" --password-stdin
+
+echo "Raw digest: ${IMAGE_DIGEST}"
+
+if [[ "${IMAGE_DIGEST}" != docker.io/* ]]; then
+  echo "❌ IMAGE_DIGEST is invalid: ${IMAGE_DIGEST}"
+  echo "Expected format: docker.io/<user>/<image>@sha256:..."
+  exit 1
+fi
+
 # --- Sign image ---
 docker compose -f "${COMPOSE_FILE}" run --rm \
   -e COSIGN_PASSWORD="${COSIGN_PASSWORD}" \
