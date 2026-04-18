@@ -6,6 +6,8 @@ echo "🔏 Starting image signing..."
 # --- Resolve paths (robust for Jenkins + local) ---
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+
+COSIGN_DIR="${PROJECT_ROOT}/DevSecOps-tools/cosign"
 COMPOSE_FILE="${PROJECT_ROOT}/DevSecOps-tools/docker-compose.yml"
 
 
