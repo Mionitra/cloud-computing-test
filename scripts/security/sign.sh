@@ -6,8 +6,6 @@ echo "🔏 Starting image signing..."
 # --- Resolve paths (robust for Jenkins + local) ---
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-
-COSIGN_DIR="${PROJECT_ROOT}/DevSecOps-tools/cosign"
 COMPOSE_FILE="${PROJECT_ROOT}/DevSecOps-tools/docker-compose.yml"
 
 
@@ -20,17 +18,13 @@ echo "📦 Signing: ${SIGN_TARGET}"
 # Login to Docker Hub
 echo "${DOCKERHUB_PSW}" | docker login -u "${DOCKERHUB_USR}" --password-stdin
 
-echo "Raw digest: ${IMAGE_DIGEST}"
+COSIGN_KEY_PATH="$(realpath ${COSIGN_DIR}/cosign.key)"
 
-if [ ! -f "${COSIGN_DIR}/cosign.key" ]; then
-  echo "❌ cosign.key not found at ${COSIGN_DIR}"
-  exit 1
-fi
+test -f "$COSIGN_KEY_PATH" || { echo "Missing cosign.key"; exit 1; }
 
-# --- Sign image ---
 docker compose -f "${COMPOSE_FILE}" run --rm \
   -e COSIGN_PASSWORD="${COSIGN_PASSWORD}" \
-  -v "${COSIGN_DIR}/cosign.key:/app/cosign.key" \
+  -v "${COSIGN_KEY_PATH}:/app/cosign.key:ro" \
   -v "$HOME/.docker:/root/.docker" \
   cosign sign \
   --key /app/cosign.key \
