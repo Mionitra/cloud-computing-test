@@ -14,36 +14,36 @@ echo "🔐 Running PRE-BUILD security scans..."
 # Bandit
 echo "▶ Running Bandit..."
 docker compose -f "$COMPOSE_FILE" run --rm \
-  -v "${SRC_DIR}:/app/src" \
-  -v "${REPORTS_DIR}/pre-build:/app/security-reports/pre-build" \
+  -v "${SRC_DIR}:/scan/src:ro" \
+  -v "${REPORTS_DIR}/pre-build:/scan/reports" \
   bandit \
-  -r /app/src \
+  -r /scan/src \
   -f json \
-  -o /app/security-reports/pre-build/bandit.json || true
+  -o /scan/reports/bandit.json || true
 echo "✅ Bandit done"
 
 # Semgrep
 echo "▶ Running Semgrep..."
 docker compose -f "$COMPOSE_FILE" run --rm \
-  -v "${SRC_DIR}:/app/src" \
-  -v "${REPORTS_DIR}/pre-build:/app/security-reports/pre-build" \
+  -v "${SRC_DIR}:/scan/src:ro" \
+  -v "${REPORTS_DIR}/pre-build:/scan/reports" \
   semgrep \
   scan --config auto --json \
-  --output /app/security-reports/pre-build/semgrep.json \
-  /app/src || true
+  --output /scan/reports/semgrep.json \
+  /scan/src || true
 echo "✅ Semgrep done"
 
 # Gitleaks
 echo "▶ Running Gitleaks..."
 docker compose -f "$COMPOSE_FILE" run --rm \
-  -v "${PROJECT_DIR}:/app/src" \
-  -v "${REPORTS_DIR}/pre-build:/app/security-reports/pre-build" \
+  -v "${PROJECT_DIR}:/scan/src:ro" \
+  -v "${REPORTS_DIR}/pre-build:/scan/reports" \
   gitleaks \
   detect \
-  --source /app/src \
+  --source /scan/src \
   --no-git \
   --report-format json \
-  --report-path /app/security-reports/pre-build/gitleaks.json || true
+  --report-path /scan/reports/gitleaks.json || true
 echo "✅ Gitleaks done"
 
 echo "✅ PRE-BUILD scans complete. Reports in ${REPORTS_DIR}/pre-build"

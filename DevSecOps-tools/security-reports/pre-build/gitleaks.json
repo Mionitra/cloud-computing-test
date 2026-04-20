@@ -1,0 +1,22 @@
+[
+ {
+  "Description": "Identified a Private Key, which may compromise cryptographic security and sensitive data encryption.",
+  "StartLine": 1,
+  "EndLine": 11,
+  "StartColumn": 1,
+  "EndColumn": 44,
+  "Match": "-----BEGIN ENCRYPTED SIGSTORE PRIVATE KEY-----\neyJrZGYiOnsibmFtZSI6InNjcnlwdCIsInBhcmFtcyI6eyJOIjo2NTUzNiwiciI6\nOCwicCI6MX0sInNhbHQiOiIvS3U4bkJrVm1PenMxUmUwcU5DeXlkWjlnb3QyTTJT\nLzBSa3c2WFdYdEs0PSJ9LCJjaXBoZXIiOnsibmFtZSI6Im5hY2wvc2VjcmV0Ym94\nIiwibm9uY2UiOiJSbnRUelR3dTlscGMrNlRuQjlmOE9PK1RKLzhULzg2UCJ9LCJj\naXBoZXJ0ZXh0IjoibVhSaTV1Um15cVpSYjZLVGtOd3lkSE5GaytqNlRFVGJIaUVN\nSno4bGxoUDRORW0vc0t1cWc3eGpTSXZ2VHBlSTE0QkJLR1VnRlRZUytZT2piVkRx\nMHdFeHFpa0MwbGM1ZERjeFVTNVZOeEVodmxQNGg0bG90MHpqYlhqQ2k1UGV6eDRa\nR0U0OUpsRURab3NBZmRKYWxrSDVMcXo2S0VWUTJtVXRjUHRUT0kxWGZ5Mmhwb3lO\nSGd1cDU3R3AwV0RjM1Y3VlVHSWlDaWFjU3c9PSJ9\n-----END ENCRYPTED SIGSTORE PRIVATE KEY----",
+  "Secret": "-----BEGIN ENCRYPTED SIGSTORE PRIVATE KEY-----\neyJrZGYiOnsibmFtZSI6InNjcnlwdCIsInBhcmFtcyI6eyJOIjo2NTUzNiwiciI6\nOCwicCI6MX0sInNhbHQiOiIvS3U4bkJrVm1PenMxUmUwcU5DeXlkWjlnb3QyTTJT\nLzBSa3c2WFdYdEs0PSJ9LCJjaXBoZXIiOnsibmFtZSI6Im5hY2wvc2VjcmV0Ym94\nIiwibm9uY2UiOiJSbnRUelR3dTlscGMrNlRuQjlmOE9PK1RKLzhULzg2UCJ9LCJj\naXBoZXJ0ZXh0IjoibVhSaTV1Um15cVpSYjZLVGtOd3lkSE5GaytqNlRFVGJIaUVN\nSno4bGxoUDRORW0vc0t1cWc3eGpTSXZ2VHBlSTE0QkJLR1VnRlRZUytZT2piVkRx\nMHdFeHFpa0MwbGM1ZERjeFVTNVZOeEVodmxQNGg0bG90MHpqYlhqQ2k1UGV6eDRa\nR0U0OUpsRURab3NBZmRKYWxrSDVMcXo2S0VWUTJtVXRjUHRUT0kxWGZ5Mmhwb3lO\nSGd1cDU3R3AwV0RjM1Y3VlVHSWlDaWFjU3c9PSJ9\n-----END ENCRYPTED SIGSTORE PRIVATE KEY----",
+  "File": "/scan/src/DevSecOps-tools/cosign/cosign.key",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 5.7512345,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "private-key",
+  "Fingerprint": "/scan/src/DevSecOps-tools/cosign/cosign.key:private-key:1"
+ }
+]
