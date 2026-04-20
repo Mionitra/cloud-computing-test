@@ -4,16 +4,19 @@ set -e
 PROJECT_DIR=$(pwd)
 COMPOSE_FILE="${PROJECT_DIR}/DevSecOps-tools/docker-compose.yml"
 TOOLS_DIR="${PROJECT_DIR}/DevSecOps-tools"
+SRC_DIR="${PROJECT_DIR}/src"
+REPORTS_DIR="${TOOLS_DIR}/security-reports"
 
-# This is what the container sees as /app/security-reports/pre-build/
-mkdir -p "${TOOLS_DIR}/security-reports/pre-build"
-mkdir -p "${TOOLS_DIR}/security-reports/build"
+mkdir -p "${REPORTS_DIR}/pre-build"
 
 echo "🔐 Running PRE-BUILD security scans..."
 
 # Bandit
 echo "▶ Running Bandit..."
-docker compose -f "$COMPOSE_FILE" run --rm bandit \
+docker compose -f "$COMPOSE_FILE" run --rm \
+  -v "${SRC_DIR}:/app/src" \
+  -v "${REPORTS_DIR}/pre-build:/app/security-reports/pre-build" \
+  bandit \
   -r /app/src \
   -f json \
   -o /app/security-reports/pre-build/bandit.json || true
@@ -21,17 +24,23 @@ echo "✅ Bandit done"
 
 # Semgrep
 echo "▶ Running Semgrep..."
-docker compose -f "$COMPOSE_FILE" run --rm semgrep \
+docker compose -f "$COMPOSE_FILE" run --rm \
+  -v "${SRC_DIR}:/app/src" \
+  -v "${REPORTS_DIR}/pre-build:/app/security-reports/pre-build" \
+  semgrep \
   scan --config auto --json \
   --output /app/security-reports/pre-build/semgrep.json \
   /app/src || true
 echo "✅ Semgrep done"
 
-# Gitleaks - --no-git because the container has no git binary
+# Gitleaks
 echo "▶ Running Gitleaks..."
-docker compose -f "$COMPOSE_FILE" run --rm gitleaks \
+docker compose -f "$COMPOSE_FILE" run --rm \
+  -v "${PROJECT_DIR}:/app/src" \
+  -v "${REPORTS_DIR}/pre-build:/app/security-reports/pre-build" \
+  gitleaks \
   detect \
-  --source /app \
+  --source /app/src \
   --no-git \
   --report-format json \
   --report-path /app/security-reports/pre-build/gitleaks.json || true

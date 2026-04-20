@@ -2,23 +2,19 @@ services:
 
   bandit:
     build: ./bandit
-    volumes:
-      - ./:/app
+      
 
   semgrep:
     build: ./semgrep
-    volumes:
-      - ./:/app
+      
 
   gitleaks:
     build: ./gitleaks
-    volumes:
-      - ./:/app
+      
 
   trivy:
     build: ./trivy
     volumes:
-      - ./:/app
       - trivy-cache:/root/.cache/trivy
     environment:
       - TRIVY_DB_REPOSITORY=aquasec/trivy-db
@@ -33,13 +29,9 @@ services:
 
   pip-audit:
     build: ./pip-audit
-    volumes:
-      - ./:/app
 
   cosign:
     build: ./cosign
-    volumes:
-      - ./:/app
 
 volumes:
   trivy-cache:
